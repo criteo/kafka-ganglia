@@ -1,6 +1,8 @@
 Kafka Ganglia Metrics Reporter
 ==============================
 
+Warning: this repository is not used by Criteo anymore. If you are using it and are interested in taking ownership, let us know by opening an issue.
+
 This is a simple reporter for kafka using the 
 [GangliaReporter](http://metrics.codahale.com/manual/ganglia/). It works with 
 kafka 0.8 beta version.
