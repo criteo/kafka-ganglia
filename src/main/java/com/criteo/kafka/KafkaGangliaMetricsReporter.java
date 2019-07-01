@@ -23,6 +23,7 @@ public class KafkaGangliaMetricsReporter implements KafkaMetricsReporter,
 	static String GANGLIA_DEFAULT_HOST = "localhost";
 	static int GANGLIA_DEFAULT_PORT = 8649;
 	static String GANGLIA_DEFAULT_PREFIX = "kafka";
+	static boolean GANGLIA_DEFAULT_VERBOSE = false;
 	
 	boolean initialized = false;
 	boolean running = false;
@@ -73,10 +74,19 @@ public class KafkaGangliaMetricsReporter implements KafkaMetricsReporter,
             gangliaHost = props.getString("kafka.ganglia.metrics.host", GANGLIA_DEFAULT_HOST);
             gangliaPort = props.getInt("kafka.ganglia.metrics.port", GANGLIA_DEFAULT_PORT);
             gangliaGroupPrefix = props.getString("kafka.ganglia.metrics.group", GANGLIA_DEFAULT_PREFIX);
-            String regex = props.getString("kafka.ganglia.metrics.exclude.regex", null);
-            if (regex != null) {
-            	predicate = new RegexMetricPredicate(regex);
+            boolean verbose = props.getBoolean("kafka.ganglia.metrics.log.verbose", GANGLIA_DEFAULT_VERBOSE);
+            String excludeRegex = props.getString("kafka.ganglia.metrics.exclude.regex", null);
+            String includeRegex = props.getString("kafka.ganglia.metrics.include.regex", null);
+
+            if (excludeRegex != null && includeRegex != null) {
+                LOG.error("Only exclude OR include regex allowed! Exclude regex has precedence");
+                predicate = new ExcludeRegexMetricPredicate(excludeRegex, verbose);
+            } else if (excludeRegex != null) {
+                predicate = new ExcludeRegexMetricPredicate(excludeRegex, verbose);
+            } else if (includeRegex != null) {
+                predicate = new IncludeRegexMetricPredicate(includeRegex, verbose);
             }
+
             try {
             	reporter = new GangliaReporter(
             			Metrics.defaultRegistry(),
