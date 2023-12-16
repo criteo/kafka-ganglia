@@ -125,12 +125,12 @@
     <repository>
       <id>criteo.releases</id>
       <name>Criteo Releases</name>
-      <url>http://maven/content/repositories/criteo.releases</url>
+      <url>https://maven/content/repositories/criteo.releases</url>
     </repository>
     <snapshotRepository>
       <id>criteo.snapshots</id>
       <name>Criteo Snapshots</name>
-      <url>http://maven/content/repositories/criteo.snapshots</url>
+      <url>https://maven/content/repositories/criteo.snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
